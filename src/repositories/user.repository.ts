@@ -1,39 +1,26 @@
-import db from "../db";
+import { AppDataSource } from "../db";
 import DatabaseError from "../models/errors/database.errors.model";
-import User from "../models/user.model";
+import User, { UserModel } from "../models/user.model";
 
-db
 
 class UserRepository{
 
-    async findAllUsers(): Promise<User[]> {
-        const query = `
-            SELECT uuid, username
-            FROM app_users
-        `;
+    async findAllUsers(): Promise<UserModel[]> {
+        try {
+            return AppDataSource.getRepository(UserModel).find();    
+        } catch (error) {
+            throw error;
+        }
         
-        const {rows} = await db.query<User>(query);
-        return rows || [];
     }
 
-    async findById(uuid : string): Promise<User>{
-        
-        try{
-            const query = `
-                SELECT uuid, username
-                FROM app_users
-                WHERE uuid = $1
-            `;
-            const values = [uuid];
-            const {rows} = await db.query<User>(query, values);
-            const [user] = rows;
-    
-            return user;
-
-        } catch (error){
-            console.log(error);
-            throw new DatabaseError("Erro na consulta por ID", error);
+    async findById(id : string): Promise<UserModel | null>{
+        try {
+            return AppDataSource.getRepository(UserModel).findOne( { where: { id }});    
+        } catch (error) {
+            throw error;
         }
+        
     }
 
     async update(user : User): Promise<void>{

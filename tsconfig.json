@@ -8,7 +8,9 @@
     "typeRoots": [
       "./src/@types/",
       "./node_modules/@types"
-    ],                                
+    ],                             
+    "experimentalDecorators": true,   
+    "emitDecoratorMetadata": true,
     "outDir": "./dist",
     "removeComments": false,
     "esModuleInterop": true,                             

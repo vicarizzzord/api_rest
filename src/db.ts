@@ -1,8 +1,31 @@
-import { Pool } from "pg";
+import { DataSource } from "typeorm";
+import { UserModel } from "./models/user.model";
 
+const AppDataSource = new DataSource({
+    type: "postgres",
+    host: "localhost",
+    port: 5433,
+    username: "postgres",
+    password: "postgres",
+    database: "postgres",
+    schema: "users",
+    entities: [
+        UserModel
+    ],
+    synchronize: true,
+    logging: true,
+});
 
-const connectionString ='postgres://chemmzys:rb2mAGf58YbXbBUWYajICQrAZpach6hm@kesavan.db.elephantsql.com/chemmzys';
+const database = async () => {
+    try{
+        await AppDataSource.initialize();
+        console.log("Database connection established successfully");
+    } catch (error) {
+        console.log("Database connection not established", error);
+        throw error;
+    }
+    
+};
 
-const db =new Pool({connectionString});
+export { AppDataSource, database };
 
-export default db;

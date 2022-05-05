@@ -3,6 +3,8 @@ import express from 'express';
 import errorHandler from './middlewares/error-handler-middleware';
 import statusRoute from './routes/status.route';
 import usersRoute from "./routes/users.route";
+import "reflect-metadata"
+import { database } from './db';
 
 const app = express();
 
@@ -23,6 +25,7 @@ app.use(errorHandler);
 
 
 // Inicialização do servidor
-app.listen(3000, () => {
+app.listen(3000, async () => {
+    await database();
     console.log('Application running on port 3000.');
 });
